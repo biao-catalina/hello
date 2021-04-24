@@ -11,7 +11,6 @@ function dateTimeToString(date) {
     if (mins < 10) mins = "0" + mins;
     return year + "-" + month + "-" + day + " " + hours + ":" + mins + ":00";
 }
-
 const trPath = '/html/body/div/div[2]/div[2]/div[3]/table/tbody/tr';
 
 const trs = $x(trPath);
@@ -24,8 +23,13 @@ for (let i = 0; i < trs.length; i++) {
     const endTime = tds[2].children[0].innerHTML;
     if (endTime !== "") {
         const obj = {};
-        const startDate = new Date(date + " " + startTime);
+        let startDate = new Date(date + " " + startTime);
+        // 加班时间不能早于18:30
+        const normalStartDate = new Date(date + " 18:30");
         startDate.setHours(startDate.getHours() + 10);
+        if (startDate < normalStartDate) {
+            startDate = normalStartDate;
+        }
         const endDate = new Date(date + " " + endTime);
         if (endDate > startDate) {
             obj.startDate = dateTimeToString(startDate);
