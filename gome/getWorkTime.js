@@ -12,7 +12,10 @@ function dateTimeToString(date) {
     return year + "-" + month + "-" + day + " " + hours + ":" + mins + ":00";
 }
 
+const workDays = ["2021-04-25"];
+
 function isWeekend(date) {
+    if (workDays.includes(date)) return false;
     const dt = new Date(date);
     return dt.getDay() === 0 || dt.getDay() === 6;
 }
