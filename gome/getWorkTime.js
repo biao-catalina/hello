@@ -53,4 +53,4 @@ for (let i = 0; i < trs.length; i++) {
         }
     }
 }
-console.log(JSON.stringify(arr));
+alert(JSON.stringify(arr));

@@ -6,6 +6,7 @@ function filterArr(arr, lastApplyDay) {
     if (lastApplyDay === null || lastApplyDay === undefined || lastApplyDay === '') {
         return arr;
     }
+    lastApplyDay += " 23:59:59";
     return arr.filter(item => item.startDate > lastApplyDay);
 }
 
@@ -18,8 +19,11 @@ function addZero(num) {
 }
 
 // 设置值
-const str = '[{"startDate":"2021-04-16 18:34:00","endDate":"2021-04-16 20:35:00"},{"startDate":"2021-04-19 18:31:00","endDate":"2021-04-19 20:35:00"},{"startDate":"2021-04-20 18:30:00","endDate":"2021-04-20 20:33:00"},{"startDate":"2021-04-21 18:30:00","endDate":"2021-04-21 20:35:00"},{"startDate":"2021-04-22 18:34:00","endDate":"2021-04-22 20:38:00"},{"startDate":"2021-04-23 18:35:00","endDate":"2021-04-23 20:43:00"},{"isWeekend":true,"startDate":"2021-04-24 12:03:00","endDate":"2021-04-24 17:05:00"}]';
-const lastApplyDay = "2021-04-22";
+let str = prompt("时间JSON");
+if (str === null) {
+    str = '[]';
+}
+const lastApplyDay = prompt("最后提报日期", "2021-04-22");
 
 let arr = JSON.parse(str);
 arr = filterArr(arr, lastApplyDay);
