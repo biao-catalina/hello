@@ -2,9 +2,14 @@ function getFirst(xpath) {
     return $x(xpath)[0];
 }
 
-getFirst('//*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr[2]/td[2]/textarea').click();
+function filterArr(arr, lastApplyDay) {
+    if (lastApplyDay === null || lastApplyDay === undefined || lastApplyDay === '') {
+        return arr;
+    }
+    return arr.filter(item => item.startDate > lastApplyDay);
+}
 
-// 先执行上面两行代码 否则加班类型没法自动填上
+// 先点开第一个加班类型
 function addZero(num) {
     if (num < 10) {
         return '0' + num;
@@ -13,16 +18,25 @@ function addZero(num) {
 }
 
 // 设置值
-const str = '[{"startDate":"2021-04-16 18:34:00","endDate":"2021-04-16 20:35:00"},{"startDate":"2021-04-19 18:31:00","endDate":"2021-04-19 20:35:00"},{"startDate":"2021-04-20 18:29:00","endDate":"2021-04-20 20:33:00"},{"startDate":"2021-04-21 18:25:00","endDate":"2021-04-21 20:35:00"},{"startDate":"2021-04-22 18:34:00","endDate":"2021-04-22 20:38:00"},{"startDate":"2021-04-23 18:35:00","endDate":"2021-04-23 20:43:00"}]';
-const arr = JSON.parse(str);
+const str = '[{"startDate":"2021-04-16 18:34:00","endDate":"2021-04-16 20:35:00"},{"startDate":"2021-04-19 18:31:00","endDate":"2021-04-19 20:35:00"},{"startDate":"2021-04-20 18:30:00","endDate":"2021-04-20 20:33:00"},{"startDate":"2021-04-21 18:30:00","endDate":"2021-04-21 20:35:00"},{"startDate":"2021-04-22 18:34:00","endDate":"2021-04-22 20:38:00"},{"startDate":"2021-04-23 18:35:00","endDate":"2021-04-23 20:43:00"},{"isWeekend":true,"startDate":"2021-04-24 12:03:00","endDate":"2021-04-24 17:05:00"}]';
+const lastApplyDay = "2021-04-22";
+
+let arr = JSON.parse(str);
+arr = filterArr(arr, lastApplyDay);
 
 const normalX = '//*[@id="tree"]/li[3]/div';
 
-// 添加加班类型为普通加班
-function addTypeByIndex(index) {
+const weekendX = '//*[@id="tree"]/li[1]/div';
+
+// 添加加班类型
+function addTypeByIndex(index, obj) {
     let areaXPath = '//*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr[' + (index + 2) + ']/td[2]/textarea';
     getFirst(areaXPath).click();
-    getFirst(normalX).click();
+    if (obj.isWeekend) {
+        getFirst(weekendX).click();
+    } else {
+        getFirst(normalX).click();
+    }
 }
 
 // 添加加班事由
@@ -58,13 +72,20 @@ const addButtonX = '//*[@id="addCommand"]/span/span/span';
 const addButton = getFirst(addButtonX);
 
 // 最多7条
-let maxLine = arr.length;
+let maxLine = arr.length > 7 ? 7 : arr.length;
 for (let i = 0; i < maxLine; i++) {
     // 第一条不用添加
     if (i > 0) {
         addButton.click();
     }
-    addTypeByIndex(i);
+    addTypeByIndex(i, arr[i]);
     addReason(i);
     addTime(i, arr[i]);
+}
+//*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr[5]/td[5]
+const rowXpath = '//*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr'
+const rows = $x(rowXpath);
+for (let i = 1; i < rows.length; i++) {
+    $(rows[i].children[2].getElementsByTagName('input')[1]).blur();
+    $(rows[i].children[3].getElementsByTagName('input')[1]).blur();
 }
