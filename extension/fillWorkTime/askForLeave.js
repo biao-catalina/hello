@@ -98,9 +98,9 @@ for (let i = 0; i < maxLine; i++) {
     addTime(i, arr[i]);
 }
 //*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr[5]/td[5]
-const rowXpath = '//*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr'
+/*const rowXpath = '//!*[@id="userbillForm"]/div[2]/div/div/table[3]/tbody/tr'
 const rows = findByXpath(rowXpath);
 for (let i = 1; i < rows.snapshotLength; i++) {
     $(rows.snapshotItem(i).children[2].getElementsByTagName('input')[1]).blur();
     $(rows.snapshotItem(i).children[3].getElementsByTagName('input')[1]).blur();
-}
+}*/
