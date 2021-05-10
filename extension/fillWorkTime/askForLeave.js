@@ -34,7 +34,7 @@ let str = prompt("时间JSON");
 if (str === null) {
     str = '[]';
 }
-const lastApplyDay = prompt("最后提报日期", "2021-04-22");
+const lastApplyDay = prompt("最后提报日期", new Date().getFullYear() + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-01');
 
 let arr = JSON.parse(str);
 arr = filterArr(arr, lastApplyDay);

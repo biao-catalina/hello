@@ -13,9 +13,11 @@ function dateTimeToString(date) {
 }
 
 const workDays = ["2021-04-25"];
+const holidays = ["2021-05-03"]
 
 function isWeekend(date) {
     if (workDays.includes(date)) return false;
+    if (holidays.includes(date)) return true;
     const dt = new Date(date);
     return dt.getDay() === 0 || dt.getDay() === 6;
 }
@@ -24,6 +26,8 @@ const trPath = '/html/body/div/div[2]/div[2]/div[3]/table/tbody/tr';
 
 const trs = $x(trPath);
 const arr = [];
+let total = 0;
+let days = 0;
 for (let i = 0; i < trs.length; i++) {
     const tr = trs[i];
     const tds = tr.children;
@@ -33,18 +37,20 @@ for (let i = 0; i < trs.length; i++) {
     if (endTime !== "") {
         const obj = {};
         let startDate = new Date(date + " " + startTime);
+        const endDate = new Date(date + " " + endTime);
+        total += (endDate - startDate) / (1000 * 60 * 60);
         // 周末加班
         if (isWeekend(date)) {
             obj.isWeekend = true;
         } else {
             // 平时加班时间不能早于18:30
+            days++;
             const normalStartDate = new Date(date + " 18:30");
             startDate.setHours(startDate.getHours() + 10);
             if (startDate < normalStartDate) {
                 startDate = normalStartDate;
             }
         }
-        const endDate = new Date(date + " " + endTime);
         const diff = endDate.getTime() - startDate.getTime();
         if (diff >= 60 * 60 * 1000) {
             obj.startDate = dateTimeToString(startDate);
@@ -53,4 +59,5 @@ for (let i = 0; i < trs.length; i++) {
         }
     }
 }
+alert(total + ' ' + days + ' ' + total / days);
 alert(JSON.stringify(arr));

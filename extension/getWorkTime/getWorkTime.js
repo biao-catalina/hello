@@ -23,9 +23,11 @@ function findByXpath(trPath) {
 }
 
 const workDays = ["2021-04-25"];
+const holidays = ["2021-05-03"]
 
 function isWeekend(date) {
     if (workDays.includes(date)) return false;
+    if (holidays.includes(date)) return true;
     const dt = new Date(date);
     return dt.getDay() === 0 || dt.getDay() === 6;
 }
