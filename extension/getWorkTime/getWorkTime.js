@@ -38,7 +38,8 @@ const trs = findByXpath(trPath);
 
 const number = trs.snapshotLength;
 const arr = [];
-
+let total = 0;
+let days = 0;
 for (let i = 0; i < number; i++) {
     const tr = trs.snapshotItem(i);
     const tds = tr.children;
@@ -48,10 +49,13 @@ for (let i = 0; i < number; i++) {
     if (endTime !== "") {
         const obj = {};
         let startDate = new Date(date + " " + startTime);
+        const endDate = new Date(date + " " + endTime);
+        total += (endDate - startDate) / (1000 * 60 * 60);
         // 周末加班
         if (isWeekend(date)) {
             obj.isWeekend = true;
         } else {
+            days++;
             // 平时加班时间不能早于18:30
             const normalStartDate = new Date(date + " 18:30");
             startDate.setHours(startDate.getHours() + 10);
@@ -59,7 +63,6 @@ for (let i = 0; i < number; i++) {
                 startDate = normalStartDate;
             }
         }
-        const endDate = new Date(date + " " + endTime);
         const diff = endDate.getTime() - startDate.getTime();
         if (diff >= 60 * 60 * 1000) {
             obj.startDate = dateTimeToString(startDate);
@@ -68,4 +71,5 @@ for (let i = 0; i < number; i++) {
         }
     }
 }
+alert((total - days * 12).toFixed(2));
 alert(JSON.stringify(arr));

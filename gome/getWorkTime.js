@@ -59,5 +59,6 @@ for (let i = 0; i < trs.length; i++) {
         }
     }
 }
-alert(total + ' ' + days + ' ' + total / days);
+// alert(total.toFixed(2) + ' ' + days + ' ---  ' + (total - days * 12).toFixed(2));
+alert((total - days * 12).toFixed(2));
 alert(JSON.stringify(arr));
